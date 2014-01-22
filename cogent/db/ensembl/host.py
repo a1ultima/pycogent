@@ -80,8 +80,8 @@ def make_db_name_pattern(species=None, db_type=None, release=None):
     
     return "'%s%s'" % (pattern, sep)
 
-def get_db_name(account=None, species=None, db_type=None, release=None,
-                division=None, DEBUG=False):
+def get_db_name(account=None, species=None, db_type=None, release=None,             
+                division=None, DEBUG=True):                                        # ANDY: database.L21
     """returns the listing of valid data-base names as EnsemblDbName objects"""
     if account is None:
         account = get_ensembl_account(release=release)
@@ -92,12 +92,12 @@ def get_db_name(account=None, species=None, db_type=None, release=None,
         print "Connection To:", account
         print "Selecting For:", species, db_type, release
     
-    server = DbConnection(account, db_name='PARENT')
+    server = DbConnection(account, db_name='PARENT')                                # ANDY: L66 <-- dont think this is the problem
     cursor = server.cursor()
     show = "SHOW DATABASES"
     if species or db_type or release:
         pattern = make_db_name_pattern(species, db_type, release)
-        show = "%s LIKE %s" % (show, pattern)
+        show = "%s LIKE %s" % (show, pattern)                                       # ANDY: SHOW DATABASES LIKE L68
     if DEBUG:
         print show
     cursor.execute(show)
@@ -107,7 +107,8 @@ def get_db_name(account=None, species=None, db_type=None, release=None,
         try:
             if division is not None and division not in row[0]:
                 continue
-            name = EnsemblDbName(row[0])
+            # ANDY: ~WARN~ TODO ... if we find out what row[0] is we can diagnose the problem...
+            name = EnsemblDbName(row[0]) # ANDY: name.L58 --> here is where we want to look
             if (release is None or name.Release == str(release)) and\
                                 (db_type is None or name.Type == db_type):
                 dbs.append(name)

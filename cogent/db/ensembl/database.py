@@ -18,9 +18,9 @@ class Database(object):
     def __init__(self, account, species=None, db_type=None, release=None,
             pool_recycle=None, division=None):
         self._tables = {}
-        self.db_name = get_db_name(account=account, species=species,
+        self.db_name = get_db_name(account=account, species=species,               # ANDY: host.L84
                           release=release, db_type=db_type, division=division)
-        if not self.db_name:
+        if not self.db_name:                                                       # ANDY: it errors here
             raise RuntimeError, "%s db doesn't exist for '%s' on '%s'" % \
                                         (db_type, species, account.host)
         else:

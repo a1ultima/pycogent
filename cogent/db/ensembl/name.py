@@ -22,8 +22,10 @@ def get_version_from_name(name):
     # note, for the ensemblgenomes naming system, the second digit run is the
     # standard Ensembl release and the first is for the specified genome
     release = name[r.start(): r.end()]
+    if(True in [isinstance(i,list) for i in r]):
+        release = (release[1][0],release[1][1])                 # ANDY
     b = [s for s in _name_delim.split(name[r.end():]) if s]
-    
+    print(b)                                                    # ANDY
     return release, b
 
 _name_delim = re.compile("_")
